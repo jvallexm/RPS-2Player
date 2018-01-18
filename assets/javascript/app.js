@@ -75,7 +75,7 @@ function newPlayer(number, name){
 		database.ref("players").child(number).set({
 			name: name,
 			wins: 0,
-			loses: 0
+			losses: 0
 		});
 		$("#name-form").addClass("display-none");
 		$("<h3>").text("Welcome " + name + " you are Player " + number + "!").appendTo("#welcome");
@@ -177,13 +177,13 @@ function whoWon(winner,player1,player2){
 	} else if(winner === 1){
 
 		setWinsOrLosses("1" , "wins"  , player1.wins);
-		setWinsOrLosses("2" , "loses" , player2.loses); 
+		setWinsOrLosses("2" , "losses" , player2.losses); 
 		$("#game-text").text(player1.name + " wins!");
 
 	} else {
 
 		setWinsOrLosses("2" , "wins"  , player2.wins);
-		setWinsOrLosses("1" , "loses" , player1.loses); 
+		setWinsOrLosses("1" , "losses" , player1.losses); 
 		$("#game-text").text(player2.name + " wins!");
 
 	}
@@ -192,6 +192,7 @@ function whoWon(winner,player1,player2){
 		emptyIcons("1");
 		emptyIcons("2");
 		setTurns(1);
+		$("#game-text").text("");
 		$("#player-1-choice").text("");
 		$("#vs").text("");
 		$("#player-2-choice").text("");
@@ -242,12 +243,12 @@ $(document).ready(function(){
 				"1": {
 					name: "",
 					wins: 0,
-					loses: 0
+					losses: 0
 				},
 				"2": {
 					name: "",
 					wins: 0,
-					loses: 0
+					losses: 0
 				},
 				turns: 0
 			});
@@ -288,6 +289,11 @@ $(document).ready(function(){
 
 			}
 
+			$("#player-1-wins").text(player1.wins);
+			$("#player-2-wins").text(player2.wins);
+			$("#player-1-losses").text(player1.losses);
+			$("#player-2-losses").text(player2.losses);
+
 			// If both player 1 and player 2 are logged in it hides the name form
 
 			if(player1.name !== "" && player2.name !== ""){
@@ -306,23 +312,28 @@ $(document).ready(function(){
 					turns = players.turns;
 					gameOn = true;
 					console.log("the game is on");
+					yourChoice = -1;
+
 					if(players.turns === 1){
 
 						takeTurn(you, "1", yourChoice);
+						$("#player-1").addClass("active");
 
 					} else if (players.turns === 2) {
 
+						$("#player-2").addClass("active");
+						$("#player-1").removeClass("active");
 						takeTurn(you, "2", yourChoice);
 
 					} else if (players.turns === 3) {
 
+						$("#player-2").removeClass("active");
 						emptyIcons("1");
 						emptyIcons("2");
 						console.log("Determining winner...");
 
 						let winner = whoWins(player1.choice,player2.choice);
 						console.log("winner is " + winner);
-						//$("#game-text").text("Winner: " + winner);
 						
 
 						$("#player-1-choice").text(player1.choice);
