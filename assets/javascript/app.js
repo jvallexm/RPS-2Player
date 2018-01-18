@@ -365,14 +365,13 @@ $(document).ready(function(){
 			$("name-text").val("");
 			$("#welcome").text("Hey, that name is too long!");
 		}
-
+		
 	});
 
 	$("body").on("click",".icon",function(){
 
 		console.log("You clicked " + this.title);
 		yourChoice = parseInt($(this).attr("icon"));
-		//console.log($(this).attr("icon"));
 		playerChoice(you,this.id,turns);
 
 	});
