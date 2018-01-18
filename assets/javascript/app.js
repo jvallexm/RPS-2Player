@@ -8,163 +8,288 @@ const config = {
   };
 
 firebase.initializeApp(config);
+const database    = firebase.database();
+const connections = database.ref("connections");
+const connected   = database.ref(".info/connected");
 
 // Buttons for players to press
 
 const buttons = [{
+
 	name    : "Rock",
 	display : "🗿"
+
 },{
+
 	name    : "Paper",
 	display : "📄"
+
 },{
+
 	name    : "Scissors",
 	display : "✂️"
+
 },{
+
 	name    : "Lizard",
 	display : "🦎"
+
 },{
+
 	name    : "Spock",
 	display : "🖖"
+
 }]; 
 
 // Creates a new button based on the object passed
 
-function makeIcon(obj){
+function makeIcon(i){
+	let obj = buttons[i];
 	return $("<button>").addClass("btn icon")
 						.attr("name", obj.name)
 						.attr("title", obj.name)
 						.attr("id", obj.name.toLowerCase())
+						.attr("icon", i)
 						.text(obj.display);
 }
 
-// Appends the icons to the selected div
+// Appends the icons to the selected player
 
-function makeIcons(div){
+function appendIcons(num){
 
 	for(let i = 0 ; i < buttons.length; i++){
-		makeIcon(buttons[i]).appendTo(div);
+		makeIcon(i).appendTo("#player-" + num + "-icons");
 	}
 
 }
 
-const database = firebase.database();
-const connections = database.ref("connections");
-const connected = database.ref(".info/connected");
+// Empties icons
 
-// Connects and disconnects users
+function emptyIcons(num){
+	$("#player-" + num + "-icons").empty();
+}
 
-connected.on("value", function(snap) {
-
-  if (snap.val()) {
-  	console.log("connected");
-    const con = connections.push(true);
-    con.onDisconnect().remove();
-  }
-
-});
-
-// Stores the two players and which player you are
-
-let player1;
-let player2;
-let you;
-
-
-database.ref().on("value",function(snap){
-
-	let players = snap.val().players;
-	if(players === undefined)
-	{
-		console.log("players is undefined");
-		database.ref("players").set({
-			"1": {
-				name: "",
-				wins: 0,
-				loses: 0
-			},
-			"2": {
-				name: "",
-				wins: 0,
-				loses: 0
-			},
-			turns: 0
-		});
-	} else {
-
-		// Makes the references to players 1 and 2
-
-		player1 = players["1"];
-		player2 = players["2"];
-
-		// Sets player 1's name
-
-		if(player1.name !== ""){
-
-			$("#player-1-name").text(player1.name);
-			$("#player-1-bottom").removeClass("hidden");
-			
-		}
-		else{
-
-			$("#player-1-name").text("Waiting for Player 1");
-
-		}
-
-		// Sets player 2's name
-
-		if(player2.name !== ""){
-
-			$("#player-2-name").text(player2.name);
-			$("#player-2-bottom").removeClass("hidden");
-			
-		}
-		else{
-
-			$("#player-2-name").text("Waiting for Player 2");
-
-		}
-
-		// If both player 1 and player 2 are logged in it hides the name form
-
-		if(player1.name !== "" && player2.name !== "")
-			$("#name-form").addClass("display-none");
-	}
-
-});
+// Creates a new player
 
 function newPlayer(number, name){
-	database.ref("players").child(number).set({
-		name: name,
-		wins: 0,
-		loses: 0
-	});
-	$("#name-form").addClass("display-none");
-	$("<h3>").text("Welcome " + name + " you are Player " + number + "!").appendTo("#welcome");
+		database.ref("players").child(number).set({
+			name: name,
+			wins: 0,
+			loses: 0
+		});
+		$("#name-form").addClass("display-none");
+		$("<h3>").text("Welcome " + name + " you are Player " + number + "!").appendTo("#welcome");
 }
 
-$("#name-form").submit(function(e){
-	e.preventDefault();
+// Sets a players choice
 
-	let newName = $("#name-text").val().trim();
+function playerChoice(num,name,turns){
+	database.ref("players").child(num).child("choice").set(name);
+	database.ref("players").child("turns").set(turns+1);
+}
 
-	if(newName != ""){
-		console.log("trying to connect " + newName);
-		if(player1.name == ""){
-			you = "1";
-			newPlayer("1",newName);
-		}
-		else{
-			you = "2";
-			newPlayer("2",newName);
-		}
+// Lets each player take a turn
+
+function takeTurn(you, num, choice){
+
+	emptyIcons("1");
+	emptyIcons("2");
+
+	if(choice !== -1 && you !== num){
+
+		makeIcon(choice).appendTo("#player-" + you + "-icons");
 	}
 
-});
+	if(you === num){
 
-$("body").on("click",".icon",function(){
+		appendIcons(num);
 
-	console.log("You clicked " + this.title);
+	} else {
+
+		waitingFor(num);
+
+	}
+
+}
+
+// Appends a waiting for header
+
+function waitingFor(num){
+	$("<h4>").text("Waiting for Player " + num + " to choose")
+  			 .addClass("waiting-for")	
+	         .appendTo("#player-" + num + "-icons");
+}
+
+// Determines who wins
+
+function whoWins(a,b){
+	if(a === b)
+		return 0;
+	else if (a === "rock"  && b === "scissors")
+		return 1;
+	else if (a === "rock"  && b === "lizard")
+		return 1;
+	else if (a === "paper" && b === "rock")
+		return 1;
+	
+}
+
+// When the document is ready...
+
+$(document).ready(function(){
+
+	// Connects and disconnects users
+
+	connected.on("value", function(snap) {
+
+	  if (snap.val()) {
+	  	console.log("connected");
+	    const con = connections.push(true);
+	    con.onDisconnect().remove();
+	  }
+
+	});
+
+	// Stores the two players and which player you are
+
+	let player1;
+	let player2;
+	let you;
+	let gameOn = false;
+	let turn = 0;
+	let yourChoice = -1;
+
+	// Gets database snapshots whenever the info changes
+
+	database.ref().on("value",function(snap){
+
+		let players = snap.val().players; // Current players
+		let currentConnections = Object.keys(snap.val().connections).length; // How many connections
+
+		// If you are the only connection or if players is not defined
+		// It initializes a new players object in the database
+
+		if(players === undefined || (you == undefined && currentConnections === 1) )
+		{
+			console.log("players is undefined");
+			database.ref("players").set({
+				"1": {
+					name: "",
+					wins: 0,
+					loses: 0
+				},
+				"2": {
+					name: "",
+					wins: 0,
+					loses: 0
+				},
+				turns: 0
+			});
+
+			player1 = players["1"];
+			player2 = players["2"];
+
+		} else {
+
+			// Makes the references to players 1 and 2
+
+			player1 = players["1"];
+			player2 = players["2"];
+
+			// Sets player 1's name
+
+			if(player1.name !== "") {
+
+				$("#player-1-name").text(player1.name);
+				$("#player-1-bottom").removeClass("hidden");
+
+			} else {
+
+				$("#player-1-name").text("Waiting for Player 1");
+
+			}
+
+			// Sets player 2's name
+
+			if(player2.name !== "") {
+
+				$("#player-2-name").text(player2.name);
+				$("#player-2-bottom").removeClass("hidden");
+
+			} else {
+
+				$("#player-2-name").text("Waiting for Player 2");
+
+			}
+
+			// If both player 1 and player 2 are logged in it hides the name form
+
+			if(player1.name !== "" && player2.name !== ""){
+
+				$("#name-form").addClass("display-none");
+				if(!gameOn){
+
+					gameOn = true;
+
+					//console.log("Game on!");
+
+					database.ref("players").child("turns").set(1);
+
+				} else if(players.turns > 0) {
+
+					turns = players.turns;
+					gameOn = true;
+					console.log("the game is on");
+					if(players.turns === 1){
+
+						takeTurn(you, "1", yourChoice);
+
+					} else if (players.turns === 2) {
+
+						takeTurn(you, "2", yourChoice);
+
+					} else if (players.turns === 3) {
+
+						emptyIcons("1");
+						emptyIcons("2");
+						console.log("evaluate");
+
+					}
+
+				}
+			}
+
+		}
+
+	});
+
+	$("#name-form").submit(function(e){
+		e.preventDefault();
+
+		let newName = $("#name-text").val().trim();
+
+		if(newName != ""){
+			console.log("trying to connect " + newName);
+			if(player1.name == ""){
+				you = "1";
+				newPlayer("1",newName);
+			}
+			else{
+				you = "2";
+				newPlayer("2",newName);
+			}
+		}
+
+	});
+
+	$("body").on("click",".icon",function(){
+
+		console.log("You clicked " + this.title);
+		yourChoice = parseInt($(this).attr("icon"));
+		console.log($(this).attr("icon"));
+		playerChoice(you,this.id,turns);
+
+	});
 
 });
 

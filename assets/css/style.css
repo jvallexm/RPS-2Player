@@ -36,7 +36,7 @@ body{
 }
 
 #play-area{
-  margin-top: 50px;
+  margin-top: 30px;
 }
 .icon{
   border: 5px solid #DC0073;
@@ -110,4 +110,7 @@ input:focus{
 }
 .display-none{
   display: none;
+}
+.waiting-for{
+  margin-top: 50px;
 }
