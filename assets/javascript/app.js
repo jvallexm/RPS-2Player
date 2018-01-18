@@ -85,10 +85,24 @@ function newPlayer(number, name){
 
 function playerChoice(num,name,turns){
 	database.ref("players").child(num).child("choice").set(name);
-	database.ref("players").child("turns").set(turns+1);
+	setTurns(turns+1);
 }
 
-// Lets each player take a turn
+// Sets turns
+
+function setTurns(turn){
+	database.ref("players").child("turns").set(turn);
+}
+
+// Sets a players wins or losses
+
+function setWinsOrLosses(num,winsOrLosses,count){
+
+	database.ref("players").child(num).child(winsOrLosses).set(count + 1);
+
+}
+
+// Lets each player take a urn
 
 function takeTurn(you, num, choice){
 
@@ -123,15 +137,67 @@ function waitingFor(num){
 // Determines who wins
 
 function whoWins(a,b){
+
 	if(a === b)
 		return 0;
-	else if (a === "rock"  && b === "scissors")
+	else if ( a === "rock"     && b === "scissors" )
 		return 1;
-	else if (a === "rock"  && b === "lizard")
+	else if ( a === "rock"     && b === "lizard"   )
 		return 1;
-	else if (a === "paper" && b === "rock")
+	else if ( a === "paper"    && b === "rock"     )
 		return 1;
-	
+	else if ( a == "paper"     && b === "spock"    )
+		return 1;
+	else if ( a === "scissors" && b === "paper"    ) 
+		return 1;
+	else if ( a === "scissors" && b === "lizard"   )
+		return 1;
+	else if ( a === "lizard"   && b === "paper"    )
+		return 1;
+	else if ( a === "lizard"   && b === "spock"    )
+		return 1;
+	else if ( a === "spock"    && b === "scissors" )
+		return 1;
+	else if ( a === "spock"    && b === "rock"     )
+		return 1;
+	else 
+		return 2;
+
+}
+
+// Modifies the database based on a winner
+
+function whoWon(winner,player1,player2){
+
+	setTurns(4);
+	if(winner === 0){
+
+		$("#game-text").text("It's a tie!");
+
+	} else if(winner === 1){
+
+		setWinsOrLosses("1" , "wins"  , player1.wins);
+		setWinsOrLosses("2" , "loses" , player2.loses); 
+		$("#game-text").text(player1.name + " wins!");
+
+	} else {
+
+		setWinsOrLosses("2" , "wins"  , player2.wins);
+		setWinsOrLosses("1" , "loses" , player1.loses); 
+		$("#game-text").text(player2.name + " wins!");
+
+	}
+	setTimeout(function(){
+
+		emptyIcons("1");
+		emptyIcons("2");
+		setTurns(1);
+		$("#player-1-choice").text("");
+		$("#vs").text("");
+		$("#player-2-choice").text("");
+
+	},5000);
+
 }
 
 // When the document is ready...
@@ -252,7 +318,17 @@ $(document).ready(function(){
 
 						emptyIcons("1");
 						emptyIcons("2");
-						console.log("evaluate");
+						console.log("Determining winner...");
+
+						let winner = whoWins(player1.choice,player2.choice);
+						console.log("winner is " + winner);
+						//$("#game-text").text("Winner: " + winner);
+						
+
+						$("#player-1-choice").text(player1.choice);
+						$("#vs").text("vs");
+						$("#player-2-choice").text(player2.choice);
+						whoWon(winner,player1,player2);
 
 					}
 
@@ -286,7 +362,7 @@ $(document).ready(function(){
 
 		console.log("You clicked " + this.title);
 		yourChoice = parseInt($(this).attr("icon"));
-		console.log($(this).attr("icon"));
+		//console.log($(this).attr("icon"));
 		playerChoice(you,this.id,turns);
 
 	});

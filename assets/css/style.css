@@ -33,6 +33,9 @@ body{
 }
 #results{
   border: 5px solid #04E762;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #play-area{
@@ -48,7 +51,7 @@ body{
   text-shadow: 1px 1px 1px black;
   margin: 5px;
 }
-h4{
+h4,#game-results{
   font-family: "Permanent Marker";
 }
 #chat-window{
