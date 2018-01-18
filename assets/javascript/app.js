@@ -12,6 +12,8 @@ const database    = firebase.database();
 const connections = database.ref("connections");
 const connected   = database.ref(".info/connected");
 
+database.ref("chats").set([]);
+
 // Buttons for players to press
 
 const buttons = [{
@@ -270,10 +272,6 @@ $(document).ready(function(){
 				$("#player-1-name").text(player1.name);
 				$("#player-1-bottom").removeClass("hidden");
 
-			} else {
-
-				$("#player-1-name").text("Waiting for Player 1");
-
 			}
 
 			// Sets player 2's name
@@ -283,11 +281,9 @@ $(document).ready(function(){
 				$("#player-2-name").text(player2.name);
 				$("#player-2-bottom").removeClass("hidden");
 
-			} else {
-
-				$("#player-2-name").text("Waiting for Player 2");
-
 			}
+
+			// Updates both players wins and loses
 
 			$("#player-1-wins").text(player1.wins);
 			$("#player-2-wins").text(player2.wins);
@@ -299,12 +295,10 @@ $(document).ready(function(){
 			if(player1.name !== "" && player2.name !== ""){
 
 				$("#name-form").addClass("display-none");
+
 				if(!gameOn){
 
 					gameOn = true;
-
-					//console.log("Game on!");
-
 					database.ref("players").child("turns").set(1);
 
 				} else if(players.turns > 0) {
@@ -355,16 +349,21 @@ $(document).ready(function(){
 
 		let newName = $("#name-text").val().trim();
 
-		if(newName != ""){
+		if(newName != "" && newName.length < 25){
+
 			console.log("trying to connect " + newName);
-			if(player1.name == ""){
+
+			if(player1.name === ""){
 				you = "1";
 				newPlayer("1",newName);
-			}
-			else{
+			} else {
 				you = "2";
 				newPlayer("2",newName);
 			}
+
+		} else if(newName.length >= 25) {
+			$("name-text").val("");
+			$("#welcome").text("Hey, that name is too long!");
 		}
 
 	});
