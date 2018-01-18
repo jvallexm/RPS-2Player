@@ -8,6 +8,9 @@ body{
                6px 6px #89FC00;
   font-family: "Permanent Marker";
 }
+#welcome{
+  font-family: "Permanent Marker";
+}
 #main{
   max-width: 900px;
 }
@@ -15,9 +18,18 @@ body{
   background-color: white;
   height: 275px;
   border-radius: 10px;
-  border: 5px solid #DC0073;
+  border: 5px solid #F5B700;
   width: 100%;
   box-shadow: 2px 2px black;
+  
+}
+.bottom-text{
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+}
+.active{
+  border: 5px solid #DC0073;
 }
 #results{
   border: 5px solid #04E762;
@@ -34,6 +46,10 @@ body{
   height: 70px;
   box-shadow: 2px 2px black;
   text-shadow: 1px 1px 1px black;
+  margin: 5px;
+}
+h4{
+  font-family: "Permanent Marker";
 }
 #chat-window{
   width: 600px;

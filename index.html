@@ -17,7 +17,8 @@
         <h1 id="title">Rock / Paper / Scissors / Lizard / Spock</h1>
 
         <!-- Form to enter player names -->
-
+        <div id="welcome">
+        </div>
         <form id="name-form" class="form-group text-center container-fluid">
             <p id="enter-name" class="text-left">Enter your name to play!</p>
             <div class="height-30">
@@ -35,8 +36,10 @@
 
               <div id="player-1" class="player">
 
-                <span id="player-1-name">Waiting for Player 1...</span>
-
+                <h4 id="player-1-name">Waiting for Player 1</h4>
+                <div id="player-1-bottom" class="hidden bottom-text">
+                  <h4>Wins: <span id="player-1-wins">0</span> Loses: <span id="player-1-loses">0</span></h4>
+                </div>
               </div>
 
             </div>
@@ -59,7 +62,11 @@
 
               <div id="player-2" class="player">
 
-                <span id="player-2-name">Waiting for Player 2...</span>
+                <h4 id="player-2-name">Waiting for Player 2</h4>
+
+                <div id="player-2-bottom" class="hidden bottom-text">
+                  <h4>Wins: <span id="player-2-wins">0</span> Loses: <span id="player-2-loses">0</span></h4>
+                </div>
 
               </div>
 
@@ -82,25 +89,7 @@
 
     </div>
       
-    <!--
-      <button id="rock"
-              title="Rock"
-              class="btn icon">🗿</button>
-      <button id="paper"
-              title="Paper"
-              class="btn icon">📄</button>
-      <button id="scissors"
-              title="Scissors"
-              class="btn icon">✂️</button>
-      <button id="lizard"
-              title="Lizard"
-              class="btn icon">🦎</button>
-      <button id="spock"
-              title="Spock"
-              class="btn icon">🖖</button>
-
-    </div>
-    -->
+    <div id="test"></div>
 
   <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
