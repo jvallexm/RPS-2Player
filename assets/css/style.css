@@ -92,3 +92,6 @@ input:focus{
   background-color: #04E762;
   color: black;
 }
+.display-none{
+  display: none;
+}
