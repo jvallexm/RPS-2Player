@@ -1,0 +1,94 @@
+body{
+  background-color: #00A1E4;
+}
+#title{
+  margin-top: 40px;
+  text-shadow: 2px 2px #F5B700,
+               4px 4px #DC0073,
+               6px 6px #89FC00;
+  font-family: "Permanent Marker";
+}
+#main{
+  max-width: 900px;
+}
+.player{
+  background-color: white;
+  height: 275px;
+  border-radius: 10px;
+  border: 5px solid #DC0073;
+  width: 100%;
+  box-shadow: 2px 2px black;
+}
+#results{
+  border: 5px solid #04E762;
+}
+
+#play-area{
+  margin-top: 50px;
+}
+.icon{
+  border: 5px solid #DC0073;
+  font-size: 200%;
+  padding: 10px;
+  width: 70px;
+  height: 70px;
+  box-shadow: 2px 2px black;
+  text-shadow: 1px 1px 1px black;
+}
+#chat-window{
+  width: 600px;
+}
+#chats{
+  margin-top: 20px;
+  height: 200px;
+  border: 5px solid #04E762;
+  border-radius: 10px;
+  box-shadow: 2px 2px black;
+  background-color: white;
+}
+#chat-form{
+  margin-top: 10px;
+  padding: 0px;
+  background-color: white;
+  border: 5px solid #04E762;
+  border-radius: 10px;
+  box-shadow: 2px 2px black;
+}
+input{
+  width: 80%;
+  height: 30px;
+  border: none;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+input:focus{
+  border: none !important;
+}
+.submit{
+  width: 20%;
+  margin-top: -5px;
+  background-color: #DC0073;
+  color: white;
+  height: 30px;
+  border: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+#name-form{
+  margin-top: 30px;
+  width: 420px;
+  background-color: #DC0073;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px black;
+}
+#enter-name{
+  font-size: 150%;
+  color: #04E762;
+  font-family: "Permanent Marker";
+  text-shadow: 2px 2px black;
+}
+#name-submit{
+  background-color: #04E762;
+  color: black;
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+   	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <title>2 Player R/P/S/L/P</title>
+  </head>
+
+  <body>
+	
+    <div id="main" class="text-center container-fluid">
+
+        <h1 id="title">Rock / Paper / Scissors / Lizard / Spock</h1>
+
+        <!-- Form to enter player names -->
+
+        <form id="name-form" class="form-group text-center container-fluid">
+            <p id="enter-name" class="text-left">Enter your name to play!</p>
+            <div class="height-30">
+              <input id="name-text"><button id="name-submit" class="submit" class="btn">Send</button>
+            </div>
+        </form>
+
+        <!-- Where the game happens -->
+      
+        <div id="play-area" class = "row text-center container-fluid">
+
+            <!-- Player One -->
+          
+            <div class = "col-md-4">
+
+              <div id="player-1" class="player">
+
+                ONE
+
+              </div>
+
+            </div>
+
+            <!-- Game results -->
+
+            <div class = "col-md-4">
+
+              <div id="results" class="player">
+
+                results
+
+              </div>
+
+            </div>
+            
+            <!-- Player Two -->
+
+            <div class = "col-md-4">
+
+              <div id="player-2" class="player">
+
+                ONE
+
+              </div>
+
+            </div>
+
+        </div>
+      
+    </div>
+      
+    <!-- A Place for Chats -->
+
+    <div id="chat-window" class="text-center container-fluid">
+
+      <div id="chats">
+      </div>
+
+      <form id="chat-form">
+        <input id="chat-text"><button id="chat-submit" class="submit" class="btn">Send</button>
+      </form>
+
+    </div>
+      
+    <!--
+      <button id="rock"
+              title="Rock"
+              class="btn icon">🗿</button>
+      <button id="paper"
+              title="Paper"
+              class="btn icon">📄</button>
+      <button id="scissors"
+              title="Scissors"
+              class="btn icon">✂️</button>
+      <button id="lizard"
+              title="Lizard"
+              class="btn icon">🦎</button>
+      <button id="spock"
+              title="Spock"
+              class="btn icon">🖖</button>
+
+    </div>
+    -->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="assets/javascript/app.js"></script>
+
+  </body>
+</html>
