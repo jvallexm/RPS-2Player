@@ -107,7 +107,7 @@ function setWinsOrLosses(num,winsOrLosses,count){
 
 }
 
-// Lets each player take a urn
+// Lets each player take a turn
 
 function takeTurn(you, num, choice){
 
@@ -145,26 +145,19 @@ function whoWins(a,b){
 
 	if(a === b)
 		return 0;
-	else if ( a === "rock"     && b === "scissors" )
+
+	else if ( (a === "rock"     && b === "scissors" )
+		   || (a === "rock"     && b === "lizard"   )
+		   || (a === "paper"    && b === "rock"     )
+		   || (a === "paper"    && b === "spock"    )
+		   || (a === "scissors" && b === "paper"    )
+		   || (a === "scissors" && b === "lizard"   )
+		   || (a === "lizard"   && b === "paper"    )
+		   || (a === "lizard"   && b === "spock"    )
+		   || (a === "spock"    && b === "scissors" )
+		   || (a === "spock"    && b === "rock"     ) )
 		return 1;
-	else if ( a === "rock"     && b === "lizard"   )
-		return 1;
-	else if ( a === "paper"    && b === "rock"     )
-		return 1;
-	else if ( a == "paper"     && b === "spock"    )
-		return 1;
-	else if ( a === "scissors" && b === "paper"    ) 
-		return 1;
-	else if ( a === "scissors" && b === "lizard"   )
-		return 1;
-	else if ( a === "lizard"   && b === "paper"    )
-		return 1;
-	else if ( a === "lizard"   && b === "spock"    )
-		return 1;
-	else if ( a === "spock"    && b === "scissors" )
-		return 1;
-	else if ( a === "spock"    && b === "rock"     )
-		return 1;
+
 	else 
 		return 2;
 
@@ -194,8 +187,6 @@ function whoWon(winner,player1,player2){
 	}
 	setTimeout(function(){
 
-		//emptyIcons("1");
-		//emptyIcons("2");
 		setTurns(1);
 		$("#game-text").text("");
 		$("#player-1-choice").text("");
@@ -235,15 +226,15 @@ $(document).ready(function(){
 
 	database.ref().on("value",function(snap){
 
-		let players = snap.val().players; // Current players
-		let currentConnections = Object.keys(snap.val().connections).length; // How many connections
+		let players = snap.val().players;                                     // Current players
+		let currentConnections = Object.keys(snap.val().connections).length;  // How many connections
 
 		// If you are the only connection or if players is not defined
 		// It initializes a new players object in the database
 
 		if(players === undefined || (you == undefined && currentConnections === 1) )
 		{
-			console.log("players is undefined");
+			console.log("initializing players");
 			database.ref("players").set({
 				"1": {
 					name: "",
@@ -356,16 +347,22 @@ $(document).ready(function(){
 			console.log("trying to connect " + newName);
 
 			if(player1.name === ""){
+
 				you = "1";
 				newPlayer("1",newName);
+
 			} else {
+
 				you = "2";
 				newPlayer("2",newName);
+
 			}
 
 		} else if(newName.length >= 25) {
+
 			$("name-text").val("");
 			$("#welcome").text("Hey, that name is too long!");
+
 		}
 
 	});
