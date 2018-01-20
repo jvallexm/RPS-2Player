@@ -59,6 +59,8 @@ function makeIcon(i){
 
 function appendIcons(num){
 
+	console.log("rendering icons for " + num);
+
 	for(let i = 0 ; i < buttons.length; i++){
 		makeIcon(i).appendTo("#player-" + num + "-icons");
 	}
@@ -68,6 +70,7 @@ function appendIcons(num){
 // Empties icons
 
 function emptyIcons(num){
+	console.log("empying icons for player " + num);
 	$("#player-" + num + "-icons").empty();
 }
 
@@ -80,7 +83,7 @@ function newPlayer(number, name){
 			losses: 0
 		});
 		$("#name-form").addClass("display-none");
-		$("<h3>").text("Welcome " + name + " you are Player " + number + "!").appendTo("#welcome");
+		$("<h3>").text("Welcome " + name + ", you are Player " + number + "!").appendTo("#welcome");
 }
 
 // Sets a players choice
@@ -191,8 +194,8 @@ function whoWon(winner,player1,player2){
 	}
 	setTimeout(function(){
 
-		emptyIcons("1");
-		emptyIcons("2");
+		//emptyIcons("1");
+		//emptyIcons("2");
 		setTurns(1);
 		$("#game-text").text("");
 		$("#player-1-choice").text("");
@@ -328,7 +331,6 @@ $(document).ready(function(){
 
 						let winner = whoWins(player1.choice,player2.choice);
 						console.log("winner is " + winner);
-						
 
 						$("#player-1-choice").text(player1.choice);
 						$("#vs").text("vs");
@@ -365,7 +367,7 @@ $(document).ready(function(){
 			$("name-text").val("");
 			$("#welcome").text("Hey, that name is too long!");
 		}
-		
+
 	});
 
 	$("body").on("click",".icon",function(){
