@@ -221,6 +221,7 @@ $(document).ready(function(){
 	let gameOn = false;
 	let turn = 0;
 	let yourChoice = -1;
+	let chats;
 
 	// Gets database snapshots whenever the info changes
 
@@ -229,12 +230,15 @@ $(document).ready(function(){
 		let players = snap.val().players;                                     // Current players
 		let currentConnections = Object.keys(snap.val().connections).length;  // How many connections
 
+		chats = snap.val().chats;
+
 		// If you are the only connection or if players is not defined
 		// It initializes a new players object in the database
 
 		if(players === undefined || (you == undefined && currentConnections === 1) )
 		{
 			console.log("initializing players");
+
 			database.ref("players").set({
 				"1": {
 					name: "",
@@ -338,6 +342,7 @@ $(document).ready(function(){
 	});
 
 	$("#name-form").submit(function(e){
+
 		e.preventDefault();
 
 		let newName = $("#name-text").val().trim();
@@ -362,6 +367,62 @@ $(document).ready(function(){
 
 			$("name-text").val("");
 			$("#welcome").text("Hey, that name is too long!");
+
+		}
+
+	});
+
+	$("#chat-form").submit(function(e){
+
+		e.preventDefault();
+		let newChat = $("#chat-text").val().trim();
+		let player = "Spectator";
+
+		if(you === "1"){
+
+			player = player1.name;
+
+		} else if (you === "2"){
+
+			player = player2.name;
+
+		}
+
+
+		if(newChat !== ""){
+
+			newChatObject = {
+
+						author: player,
+						text: newChat,
+						posted_on: firebase.database.ServerValue.TIMESTAMP
+
+			};
+
+			if(chats === undefined)
+			{
+
+				database.ref("chats").set({
+
+					first: newChatObject
+
+				});
+
+			} else {
+
+				database.ref().child("chats").push(newChatObject);
+
+			}
+
+			let chatElement = $("<p>");
+			let chatAuthor = $("<strong>").text(player);
+			let chatText = $("<span>").text(" " + newChat);
+
+			chatElement.append(chatAuthor)
+					   .append(chatText);
+			$("#chats").append(chatElement);
+
+			$("#chat-text").val("");
 
 		}
 

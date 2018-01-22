@@ -44,6 +44,10 @@ body{
 .active{
     border: 5px solid #DC0073;
 }
+#chats{
+  text-align: left;
+  padding: 5px;
+}
 .icon{
   border: 5px solid #DC0073;
   font-size: 200%;
