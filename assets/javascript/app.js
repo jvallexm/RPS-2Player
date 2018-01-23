@@ -197,6 +197,21 @@ function whoWon(winner,player1,player2){
 
 }
 
+// Creates a chat text object
+
+function newChatElement(player,newChat){
+
+			let chatElement = $("<p>");
+			let chatAuthor  = $("<strong>").text(player + ":");
+			let chatText    = $("<span>").text(" " + newChat);
+
+			chatElement.append(chatAuthor)
+					   .append(chatText);
+
+			return chatElement;
+
+}
+
 // When the document is ready...
 
 $(document).ready(function(){
@@ -231,6 +246,43 @@ $(document).ready(function(){
 		let currentConnections = Object.keys(snap.val().connections).length;  // How many connections
 
 		chats = snap.val().chats;
+
+		if(chats !== undefined){
+
+			let chatIds = Object.keys(chats);
+			let sortedChats = [];
+
+			for(let i=0 ; i < chatIds.length; i++){
+
+				sortedChats.push(chats[chatIds[i]]);
+
+			}
+
+			sortedChats = sortedChats.sort((a,b)=>{
+
+				if(a.posted_on > b.posted_on)
+					return 1;
+				else
+					return -1;
+
+			});
+
+			while(sortedChats.length > 6){
+
+				sortedChats.shift();
+
+			}
+
+			$("#chats").empty();
+
+			for(let i=0;i<sortedChats.length;i++){
+
+				$("#chats").append(newChatElement(sortedChats[i].author,sortedChats[i].text));
+
+			}
+			$("#chats").scrollTop = $("#chats").scrollHeight;
+
+		}
 
 		// If you are the only connection or if players is not defined
 		// It initializes a new players object in the database
@@ -414,14 +466,6 @@ $(document).ready(function(){
 
 			}
 
-			let chatElement = $("<p>");
-			let chatAuthor = $("<strong>").text(player);
-			let chatText = $("<span>").text(" " + newChat);
-
-			chatElement.append(chatAuthor)
-					   .append(chatText);
-			$("#chats").append(chatElement);
-
 			$("#chat-text").val("");
 
 		}
@@ -435,7 +479,6 @@ $(document).ready(function(){
 		playerChoice(you,this.id,turns);
 
 	});
-
 });
 
 

@@ -44,10 +44,6 @@ body{
 .active{
     border: 5px solid #DC0073;
 }
-#chats{
-  text-align: left;
-  padding: 5px;
-}
 .icon{
   border: 5px solid #DC0073;
   font-size: 200%;
@@ -66,6 +62,7 @@ h4{
 }
 #chat-window{
   width: 600px;
+  vertical-align: bottom
 }
 #chats{
   margin-top: 20px;
@@ -74,6 +71,9 @@ h4{
   border-radius: 10px;
   box-shadow: 2px 2px black;
   background-color: white;
+  overflow: scroll;
+  text-align: left;
+  padding: 5px;
 }
 #chat-form{
   margin-top: 10px;
